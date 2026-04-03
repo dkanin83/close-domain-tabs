@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Закрыватель вкладок по домену",
+  "version": "1.0",
+  "description": "Закрывает все вкладки с указанным доменом",
+  "permissions": ["tabs", "storage", "contextMenus"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Закрыть вкладки домена"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      width: 400px;
+      padding: 15px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    h3 {
+      margin: 0 0 10px 0;
+      color: #333;
+      text-align: center;
+      font-size: 16px;
+    }
+    .input-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    input[type="text"] {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      flex: 1;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #4285f4;
+      box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.3s, transform 0.1s;
+    }
+    button:hover {
+      background-color: #3367d6;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    #closeBtn {
+      width: 100%;
+    }
+    #status {
+      margin-top: 10px;
+      font-size: 13px;
+      text-align: center;
+      min-height: 20px;
+      padding: 5px;
+      border-radius: 4px;
+      background-color: #f0f0f0;
+    }
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      color: #555;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .domain-list {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      background-color: white;
+    }
+    .domain-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 10px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      overflow: hidden;
+    }
+    .domain-item:hover {
+      background-color: #f5f5f5;
+    }
+    .domain-item.active {
+      background-color: #e8f0fe;
+    }
+    .domain-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .favicon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .domain-name {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .tab-count {
+      background-color: #4285f4;
+      color: white;
+      font-size: 10.5px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      min-width: 16px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .actions {
+      display: flex;
+      gap: 6px;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      font-weight: 500;
+      min-width: 28px;
+    }
+    .action-btn:hover {
+      background-color: #f0f0f0;
+      transform: scale(1.05);
+    }
+    .btn-root {
+      color: #1976d2;
+      background-color: #e3f2fd;
+    }
+    .btn-root:hover {
+      background-color: #bbdef5;
+    }
+    .btn-sub {
+      color: #43a047;
+      background-color: #e8f5e9;
+    }
+    .btn-sub:hover {
+      background-color: #c8e6c9;
+    }
+    .btn-all {
+      color: #e53935;
+      background-color: #ffebee;
+    }
+    .btn-all:hover {
+      background-color: #ffcdd2;
+    }
+    .refresh-btn {
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background-color: #f0f0f0;
+    }
+    .refresh-btn:hover {
+      background-color: #e0e0e0;
+    }
+    .no-domains {
+      text-align: center;
+      color: #999;
+      padding: 20px;
+      font-size: 13px;
+    }
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .history-item:hover {
+      background-color: #f0f0f0;
+    }
+    .history-item .domain-name {
+      flex: 1;
+    }
+    .clear-history {
+      margin-top: 10px;
+      padding: 8px;
+      background-color: #f8f9fa;
+      color: #666;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      width: 100%;
+    }
+    .clear-history:hover {
+      background-color: #e9ecef;
+    }
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .tab.active {
+      border-bottom-color: #4285f4;
+      color: #4285f4;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .domain-root {
+      background-color: #fff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .domain-root .domain-info {
+      font-weight: 500;
+    }
+    .domain-child {
+      background-color: #fafafa;
+      border-bottom: 1px solid #f0f0f0;
+      padding-left: 28px;
+    }
+    .subdomains-container {
+      display: none;
+    }
+    .subdomains-container.expanded {
+      display: block;
+    }
+    .toggle-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      padding: 0 6px;
+      font-size: 14px;
+      line-height: 1;
+      flex-shrink: 0;
+      font-weight: bold;
+    }
+    .toggle-btn:disabled {
+      cursor: default;
+      opacity: 0.4;
+    }
+    .checkbox-label {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12.5px;
+      color: #555;
+      cursor: pointer;
+    }
+    .checkbox-label input {
+      width: auto;
+      margin: 0;
+    }
+    .action-icon {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>🗑️ Закрыть вкладки домена</h3>
+    
+    <div class="input-group">
+      <input 
+        type="text" 
+        id="domainInput" 
+        placeholder="Введите домен (например, google.com)"
+        autocomplete="off"
+      >
+    </div>
+    
+    <label class="checkbox-label">
+      <input type="checkbox" id="closePinnedCheckbox">
+      📌 Закрывать закрепленные вкладки
+    </label>
+    
+    <button id="closeBtn">✖️ Закрыть все вкладки домена</button>
+    
+    <div class="tabs">
+      <div class="tab active" data-tab="current">📂 Текущие вкладки</div>
+      <div class="tab" data-tab="history">📜 История</div>
+    </div>
+    
+    <div id="currentTabContent" class="tab-content active">
+      <div class="section-title">
+        <span>🌐 Открытые домены:</span>
+        <button class="refresh-btn" id="refreshDomainsBtn">⟳ Обновить</button>
+      </div>
+      <div id="currentDomains" class="domain-list">
+        <div class="no-domains">Загрузка...</div>
+      </div>
+    </div>
+    
+    <div id="historyTabContent" class="tab-content">
+      <div class="section-title">
+        <span>🕐 История доменов:</span>
+        <button class="refresh-btn" id="clearHistoryBtn">🗑️ Очистить</button>
+      </div>
+      <div id="history" class="domain-list"></div>
+    </div>
+    
+    <div id="status"></div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
