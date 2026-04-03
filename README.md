@@ -35,7 +35,9 @@
 
 ## Скриншоты
 
-(добавьте скриншоты работы расширения)
+<img width="450" height="605" alt="image" src="https://github.com/user-attachments/assets/c785a572-47d3-47fe-b3c7-7772949fcdc6" />
+
+
 
 ## Технологии
 
